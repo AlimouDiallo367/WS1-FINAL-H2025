@@ -1,0 +1,33 @@
+## Structure de fichiers de base 
+/assets/
+    /css/
+        style.css
+    /img/
+        jeu-defaut.svg
+        logo.webp
+        profil-defaut.jpg
+    /js/
+/dal
+    /dao/
+        BaseDao.php
+        ConfigDao.php 
+        JeuDao.php
+        RoleDao.php
+        StatistiqueDao.php
+        UtilisateurDao.php
+    /modeles/
+        Jeu.php
+        Partie.php
+        ResultatClassementGlobale.php
+        Role.php
+        Utilisateur.php
+/section/
+    entete.phtml
+    head.phtml
+    pied.phtml
+    retroaction.phmtl
+/autoloader.php
+/config.php
+/final.sql
+/index.phtml
+/session.php
