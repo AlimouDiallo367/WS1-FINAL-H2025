@@ -56,6 +56,9 @@ class Utilisateur
 
     public function setNomUtilisateur(string $nomUtilisateur): self
     {
+        $nomUtilisateur = trim($nomUtilisateur);
+        if (empty($nomUtilisateur) || strlen($nomUtilisateur) > 50)
+            throw new Exception("Le nom d'utilisateur '$nomUtilisateur' doit être entre 1 et 50 caractères.");
         $this->nomUtilisateur = $nomUtilisateur;
         return $this;
     }
@@ -67,6 +70,9 @@ class Utilisateur
 
     public function setPrenom(string $prenom): self
     {
+        $prenom = trim($prenom);
+        if (empty($prenom) || strlen($prenom) > 50)
+            throw new Exception("Le prenom '$prenom' doit être entre 1 et 50 caractères.");
         $this->prenom = $prenom;
         return $this;
     }
@@ -89,6 +95,9 @@ class Utilisateur
 
     public function setBio(string $bio): self
     {
+        $bio = trim($bio);
+        if (empty($bio) || strlen($bio) > 255)
+            throw new Exception("La bio '$bio' doit être entre 1 et 255 caractères.");
         $this->bio = $bio;
         return $this;
     }
@@ -133,6 +142,9 @@ class Utilisateur
 
     public function setUrlAvatar(string $urlAvatar): self
     {
+        $urlAvatar = trim($urlAvatar);
+        if(!filter_var($urlAvatar, FILTER_VALIDATE_URL))
+            throw new Exception("L'URL '$urlAvatar' n'est pas de format valide.");
         $this->urlAvatar = $urlAvatar;
         return $this;
     }
@@ -144,7 +156,10 @@ class Utilisateur
 
     public function setHash(string $hash): self
     {
+        if (strlen($hash) < 5)
+            throw new Exception("Le mot de passe faire au minimum 5 caractères.");
         $this->hash = $hash;
         return $this;
     }
 }
+
