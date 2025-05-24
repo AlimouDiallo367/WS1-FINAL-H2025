@@ -69,6 +69,8 @@ class Partie
 
     public function setIdJoueur1ET2(int $joueur1Id, int $joueur2Id): self
     {
+        if ($joueur1Id === $joueur2Id)
+            throw new Exception("Les deux joueurs doivent être différents.");
         $this->joueur1Id = $joueur1Id;
         $this->joueur2Id = $joueur2Id;
         return $this;
@@ -103,6 +105,8 @@ class Partie
 
     public function setScoreJoueur1(int $scoreJoueur1): self
     {
+        if ($scoreJoueur1 < 0)
+            throw new Exception("Le score du joueur 1 doit être >= 0.");
         $this->scoreJoueur1 = $scoreJoueur1;
         return $this;
     }
@@ -114,6 +118,8 @@ class Partie
 
     public function setScoreJoueur2(int $scoreJoueur2): self
     {
+        if ($scoreJoueur2 < 0)
+            throw new Exception("Le score du joueur 2 doit être >= 0.");
         $this->scoreJoueur2 = $scoreJoueur2;
         return $this;
     }

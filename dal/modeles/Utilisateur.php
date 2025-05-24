@@ -57,8 +57,8 @@ class Utilisateur
     public function setNomUtilisateur(string $nomUtilisateur): self
     {
         $nomUtilisateur = trim($nomUtilisateur);
-        if (empty($nomUtilisateur) || strlen($nomUtilisateur) > 50)
-            throw new Exception("Le nom d'utilisateur '$nomUtilisateur' doit être entre 1 et 50 caractères.");
+        if (empty($nomUtilisateur) || strlen($nomUtilisateur) > 50 || !ctype_alnum($nomUtilisateur))
+            throw new Exception("Le nom d'utilisateur '$nomUtilisateur' doit être entre 1 et 50 caractères contenir uniquement des caractères alphanumériques.");
         $this->nomUtilisateur = $nomUtilisateur;
         return $this;
     }
@@ -84,6 +84,9 @@ class Utilisateur
 
     public function setNom(string $nom): self
     {
+        $nom = trim($nom);
+        if (empty($nom) || strlen($nom) > 50)
+            throw new Exception("Le nom '$nom' doit être entre 1 et 50 caractères.");
         $this->nom = $nom;
         return $this;
     }
@@ -162,4 +165,3 @@ class Utilisateur
         return $this;
     }
 }
-
