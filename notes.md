@@ -62,16 +62,16 @@ cp -r * /assets/css
             - Une fois connecté, le seuil d'inactivité toléré est de 5 minutes. Sinon,m, il est redirigé vers la page de connexion.
         - Peut s'inscrire (créer un compte)
             - Le formulaire présente les champs (tous obligatoire) :
-                ▪ Nom utilisateur : Seuls les caractères alphanumériques sont acceptés.
+                - [x] Nom utilisateur : Seuls les caractères alphanumériques sont acceptés.
                 Entre 1 et 50 caractères.
-                ▪ Mot de passe : 5 caractères minimum.
-                ▪ La confirmation du mot de passe. Le mot de passe et la confirmation
+                - [x] Mot de passe : 5 caractères minimum.
+                - [ ] La confirmation du mot de passe. Le mot de passe et la confirmation
                 doivent correspondre.
-                ▪ Le prénom de l’utilisateur. Entre 1 et 50 caractères.
-                ▪ Le nom de l’utilisateur. Entre 1 et 50 caractères.
-                ▪ Bio : Entre 1 et 255 caractères.
-                ▪ Url avatar/image profil : L’URL doit être de format valide.
-                ▪ Le type du compte est systématiquement « Joueur ».
+                - [x] Le prénom de l’utilisateur. Entre 1 et 50 caractères.
+                - [x] Le nom de l’utilisateur. Entre 1 et 50 caractères.
+                - [x] Bio : Entre 1 et 255 caractères.
+                - [x] Url avatar/image profil : L’URL doit être de format valide.
+                - [ ] Le type du compte est systématiquement « Joueur ».
             - Lors d’une inscription réussie, message de succès.
         - Peut consulter l'accueil
             - Consultation des statistiques "En bref" notamment : 
@@ -102,12 +102,13 @@ cp -r * /assets/css
     * Utilisateur authentifié (type admin)
         - Peut faire tout ce qu'un utilisateur connecté de type Joueur peut faire.
         - Peut ajouter une partie (tous les champs sont obligatoires) : 
-            - Choisir le joueur 0 (type « Joueur » seulement)
-            - Fournir le score >= 0 du joueur 1
+            - [] Choisir le joueur 1 (type « Joueur » seulement)
+            - [x]Fournir le score >= 0 du joueur 1
             - Choisir le joueur 2 (type « Joueur » seulement). Il doit être différent du joueur 1
-            - Fournir le score >=0 du joueur 2
+            - [x]Fournir le score >=0 du joueur 2
             - Choisir le jeu
 
+            - **IMPORTANT : Demander à Fred si la validation des id joueurs et jeu doivent être >= 0**
 
 
 ```php
@@ -127,3 +128,13 @@ public function setNomUtilisateur(string $nomUtilisateur): self
     return $this;
 }
 ```
+
+### Code des DAO 
+1. Création de PartieDao.php, puis complétion de UtilisateurDao.php
+2. Complétion de UtilisateurDao.php 
+    - Ce qu'il manque : 
+        - inserer (Add utilisateur/Création nouveau compte)
+        - update (Update profil)
+        - changerMotDePasse (Update mot de passe)
+        - selectTout (Afficher tout les utilisateur*)
+        - supprimer (pas besoin dans le cas du projet)
