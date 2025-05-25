@@ -33,9 +33,9 @@ class PartieDao extends BaseDao
         {
             $partie = $this->construirePartie($enregistrement);
 
-            // $partie->setJoueur1($this->utilisateurDao->select($partie->getJoueur1Id()));
-            // $partie->setJoueur2($this->utilisateurDao->select($partie->getJoueur2Id()));
-            // $partie->setJeu($this->jeuDao->select($partie->getJeuId()));
+            $partie->setJoueur1($this->utilisateurDao->select($partie->getJoueur1Id()));
+            $partie->setJoueur2($this->utilisateurDao->select($partie->getJoueur2Id()));
+            $partie->setJeu($this->jeuDao->select($partie->getJeuId()));
 
             $parties[] = $partie;
         }
@@ -56,9 +56,9 @@ class PartieDao extends BaseDao
         {
             $partie = $this->construirePartie($enregistrement);
 
-            // $partie->setJoueur1($this->utilisateurDao->select($partie->getJoueur1Id()));
-            // $partie->setJoueur2($this->utilisateurDao->select($partie->getJoueur2Id()));
-            // $partie->setJeu($this->jeuDao->select($partie->getJeuId()));
+            $partie->setJoueur1($this->utilisateurDao->select($partie->getJoueur1Id()));
+            $partie->setJoueur2($this->utilisateurDao->select($partie->getJoueur2Id()));
+            $partie->setJeu($this->jeuDao->select($partie->getJeuId()));
 
             $parties[] = $partie;
         }

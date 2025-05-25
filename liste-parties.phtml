@@ -1,0 +1,58 @@
+<?php
+require_once "config.php";
+require_once "session.php";
+
+// $infos[] = "Un message d'information";
+// $erreurs[] = "Un message d'erreur";
+?>
+
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+  <?php require_once 'section/head.phtml'; ?>
+  <title>Liste des parties - Point Final</title>
+</head>
+
+<body>
+  <?php require_once 'section/entete.phtml'; ?>
+
+  <main class="container py-4">
+    <?php require_once 'section/retroaction.phtml'; ?>
+
+    <h1 class="mb-4">Liste des parties</h1>
+
+    <div class="table-responsive shadow-sm border rounded">
+      <table class="table table-hover mb-0">
+        <thead class="table-light">
+          <tr>
+            <th>Date</th>
+            <th>Joueur 1 (score)</th>
+            <th>Joueur 2 (score)</th>
+            <th>Jeu</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- Exemple statique à remplacer par une boucle PHP plus tard -->
+          <tr>
+            <td>2025-02-09 à 12:12</td>
+            <td><a href="profil.phtml?id=7">Mathieu St-Yves (2)</a></td>
+            <td><a href="profil.phtml?id=5">Lyne Amyot (1)</a></td>
+            <td>Tetris</td>
+          </tr>
+          <tr>
+            <td>2025-02-08 à 17:08</td>
+            <td><a href="profil.phtml?id=7">Mathieu St-Yves (1)</a></td>
+            <td><a href="profil.phtml?id=2">fred Monchamp (1)</a></td>
+            <td>Tetris</td>
+          </tr>
+          <!-- Tu peux dupliquer ce bloc en attendant le DAO -->
+        </tbody>
+      </table>
+    </div>
+  </main>
+
+  <?php require_once 'section/pied.phtml'; ?>
+</body>
+
+</html>

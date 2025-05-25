@@ -1,0 +1,70 @@
+<?php
+
+require_once "config.php";
+require_once 'session.php';
+
+// $infos[] = "Un message d'information";
+// $erreurs[] = "Un message d'erreur";
+?>
+
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+  <?php require_once 'section/head.phtml'; ?>
+  <title>Classement - Point Final</title>
+</head>
+
+<body>
+  <?php require_once 'section/entete.phtml'; ?>
+
+  <main class="container py-4">
+    <?php require_once 'section/retroaction.phtml'; ?>
+
+    <!-- Titre principal -->
+    <h1 class="mb-4">Classement</h1>
+
+    <!-- Tableau du classement -->
+    <div class="table-responsive shadow-sm border rounded">
+      <table class="table table-hover mb-0">
+        <thead class="table-light">
+          <tr>
+            <th>Rang</th>
+            <th>Joueur</th>
+            <th>Gagnées</th>
+            <th>Égalité</th>
+            <th>Perdues</th>
+            <th>Total</th>
+            <th>Score</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- Exemple de ligne statique, à remplacer dynamiquement plus tard -->
+          <tr>
+            <td>1</td>
+            <td><a href="profil.phtml?id=1">Mathieu St-Yves</a></td>
+            <td>2</td>
+            <td>2</td>
+            <td>0</td>
+            <td>4</td>
+            <td>8</td>
+          </tr>
+          <tr>
+            <td>2</td>
+            <td><a href="profil.phtml?id=2">Nicolas Bourre</a></td>
+            <td>2</td>
+            <td>0</td>
+            <td>1</td>
+            <td>3</td>
+            <td>6</td>
+          </tr>
+          <!-- À dupliquer dynamiquement via DAO -->
+        </tbody>
+      </table>
+    </div>
+  </main>
+
+  <?php require_once 'section/pied.phtml'; ?>
+</body>
+
+</html>

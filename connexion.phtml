@@ -1,0 +1,53 @@
+<?php
+require_once "config.php";
+require_once "session.php";
+
+// $infos[] = "Un message d'information";
+// $erreurs[] = "Un message d'erreur";
+?>
+
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+  <?php require_once 'section/head.phtml'; ?>
+  <title>Connexion - Point Final</title>
+</head>
+
+<body>
+  <?php require_once 'section/entete.phtml'; ?>
+
+  <main class="container py-5" style="max-width: 500px;">
+    <?php require_once 'section/retroaction.phtml'; ?>
+
+    <div class="card shadow-sm">
+      <div class="card-body">
+        <h2 class="card-title text-center mb-4">Connexion</h2>
+
+        <form method="post" action="connexion.phtml">
+          <div class="mb-3">
+            <label for="nom-utilisateur" class="form-label">Nom d'utilisateur</label>
+            <input type="text" class="form-control" id="nom-utilisateur" name="nom-utilisateur" required>
+          </div>
+
+          <div class="mb-3">
+            <label for="mot-de-passe" class="form-label">Mot de passe</label>
+            <input type="password" class="form-control" id="mot-de-passe" name="mot-de-passe" required>
+          </div>
+
+          <div class="d-grid">
+            <input type="submit" class="btn btn-primary" name="bouton-connexion" value="Se connecter">
+          </div>
+        </form>
+
+        <div class="text-center mt-4">
+          <small>Pas de compte ? <a href="inscription.phtml">Inscrivez-vous ici</a>.</small>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <?php require_once 'section/pied.phtml'; ?>
+</body>
+
+</html>

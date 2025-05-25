@@ -1,24 +1,51 @@
-<header class="navbar navbar-expand-lg bg-white shadow-sm px-4 py-2">
+<header class="navbar navbar-expand-lg navbar-light bg-white shadow-sm px-4 py-2">
   <div class="container-fluid">
-    <!-- Logo -->
-    <a class="navbar-brand d-flex align-items-center" href="#">
-      <img src="assets/img/logo.webp" alt="Logo" width="50" height="50" class="me-2">
-      <span class="fw-bold fs-4">Point Final</span>
+
+    <!-- Logo + Nom -->
+    <a class="navbar-brand d-flex align-items-center" href="index.phtml">
+      <img src="assets/img/logo.webp" alt="Logo" width="60" height="60" class="me-2">
+      <span class="fw-semibold fs-5">Point Final</span>
     </a>
 
-    <!-- Bouton hamburger (mobile) -->
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#main-navbar">
-      <span class="navbar-toggler-icon"></span>
-    </button>
+    <!-- Hamburger mobile (remplacé avec icône Material) -->
+  <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#main-navbar" aria-label="Toggle navigation">
+    <span class="material-icons-round fs-3">menu</span>
+  </button>
 
-    <!-- Liens de navigation -->
+    <!-- Navigation -->
     <div class="collapse navbar-collapse justify-content-end" id="main-navbar">
-      <ul class="navbar-nav mb-2 mb-lg-0 gap-3">
-        <li class="nav-item"><a class="nav-link active" href="#">Accueil</a></li>
-        <li class="nav-item"><a class="nav-link" href="#">Classement</a></li>
-        <li class="nav-item"><a class="nav-link" href="#">Parties</a></li>
-        <li class="nav-item"><a class="nav-link" href="#">Connexion</a></li>
-        <li class="nav-item"><a class="nav-link" href="#">Inscription</a></li>
+      <ul class="navbar-nav gap-2 align-items-center">
+
+        <li class="nav-item">
+          <a class="nav-link d-flex align-items-center" href="accueil.phtml">
+            <span class="material-icons-round me-1">home</span> Accueil
+          </a>
+        </li>
+
+        <li class="nav-item">
+          <a class="nav-link d-flex align-items-center" href="classement.phtml">
+            <span class="material-icons-round me-1">leaderboard</span> Classement
+          </a>
+        </li>
+
+        <li class="nav-item">
+          <a class="nav-link d-flex align-items-center" href="liste-parties.phtml">
+            <span class="material-icons-round me-1">list_alt</span> Parties
+          </a>
+        </li>
+
+        <li class="nav-item">
+          <a class="nav-link d-flex align-items-center" href="connexion.phtml">
+            <span class="material-icons-round me-1">login</span> Connexion
+          </a>
+        </li>
+
+        <li class="nav-item">
+          <a class="nav-link d-flex align-items-center" href="inscription.phtml">
+            <span class="material-icons-round me-1">person_add</span> Inscription
+          </a>
+        </li>
+
       </ul>
     </div>
   </div>
