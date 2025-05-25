@@ -164,4 +164,10 @@ class Utilisateur
         $this->hash = $hash;
         return $this;
     }
+
+    public function getNomComplet(): string
+{
+    return $this->prenom . ' ' . $this->nom;
+}
+
 }

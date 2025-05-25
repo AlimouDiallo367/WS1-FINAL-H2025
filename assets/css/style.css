@@ -20,6 +20,20 @@
     margin-bottom: 2rem!important;
 }
 
+html, body {
+  height: 100%;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+}
+
+main {
+  flex-grow: 1;
+}
+
+
 form .form-control {
     border: none;
     border-bottom: 1px solid #ccc;

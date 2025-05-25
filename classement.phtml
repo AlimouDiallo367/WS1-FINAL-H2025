@@ -1,10 +1,9 @@
 <?php
-
 require_once "config.php";
 require_once 'session.php';
 
-// $infos[] = "Un message d'information";
-// $erreurs[] = "Un message d'erreur";
+$statistiqueDao = new StatistiqueDao($config);
+$classement = $statistiqueDao->selectClassementGlobal();
 ?>
 
 <!DOCTYPE html>
@@ -44,26 +43,22 @@ require_once 'session.php';
           </tr>
         </thead>
         <tbody>
-          <!-- Exemple de ligne statique, à remplacer dynamiquement plus tard -->
-          <tr>
-            <td>1</td>
-            <td><a href="profil.phtml?id=1">Mathieu St-Yves</a></td>
-            <td>2</td>
-            <td>2</td>
-            <td>0</td>
-            <td>4</td>
-            <td>8</td>
-          </tr>
-          <tr>
-            <td>2</td>
-            <td><a href="profil.phtml?id=2">Nicolas Bourre</a></td>
-            <td>2</td>
-            <td>0</td>
-            <td>1</td>
-            <td>3</td>
-            <td>6</td>
-          </tr>
-          <!-- À dupliquer dynamiquement via DAO -->
+          <?php $rang = 1; ?>
+          <?php foreach ($classement as $joueur): ?>
+            <tr>
+              <td><?= $rang++ ?></td>
+              <td>
+                <a href="profil.phtml?id=<?= $joueur->getJoueurId() ?>">
+                  <?= htmlspecialchars($joueur->getNomComplet()) ?>
+                </a>
+              </td>
+              <td><?= $joueur->getNbPartiesGagnees() ?></td>
+              <td><?= $joueur->getNbPartiesEgales() ?></td>
+              <td><?= $joueur->getNbPartiesPerdues() ?></td>
+              <td><?= $joueur->getNbPartiesJouees() ?></td>
+              <td><?= $joueur->getScoreTotal() ?></td>
+            </tr>
+          <?php endforeach; ?>
         </tbody>
       </table>
     </div>

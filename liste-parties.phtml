@@ -1,6 +1,9 @@
 <?php
 require_once "config.php";
 require_once "session.php";
+
+$partieDao = new PartieDao($config);
+$parties = $partieDao->selectAll();
 ?>
 
 <!DOCTYPE html>
@@ -14,14 +17,14 @@ require_once "session.php";
 <body class="g-sidenav-show bg-gray-100">
   <?php require_once 'section/entete.phtml'; ?>
 
-  <main class="main-content position-relative max-height-vh-100 h-100 border-radius-lg px-4 py-4">
+  <main class="main-content position-relative px-4 py-4">
     <?php require_once 'section/retroaction.phtml'; ?>
 
     <!-- Titre principal -->
     <div class="mb-4 text-center">
       <h2 class="text-gradient text-primary fw-bold mb-2">Liste des parties</h2>
       <p class="text-secondary text-sm mx-auto" style="max-width: 600px;">
-        Voici l’ensemble des parties jouées sur l’arcade, avec les joueurs et leur score.
+        Voici l’ensemble des parties jouées sur l'arcade, avec les joueurs et leur score.
       </p>
     </div>
 
@@ -37,20 +40,22 @@ require_once "session.php";
           </tr>
         </thead>
         <tbody>
-          <!-- Exemple statique -->
-          <tr>
-            <td>2025-02-09 à 12:12</td>
-            <td><a href="profil.phtml?id=7" class="text-dark fw-semibold">Mathieu St-Yves (2)</a></td>
-            <td><a href="profil.phtml?id=5" class="text-dark fw-semibold">Lyne Amyot (1)</a></td>
-            <td class="text-secondary">Tetris</td>
-          </tr>
-          <tr>
-            <td>2025-02-08 à 17:08</td>
-            <td><a href="profil.phtml?id=7" class="text-dark fw-semibold">Mathieu St-Yves (1)</a></td>
-            <td><a href="profil.phtml?id=2" class="text-dark fw-semibold">fred Monchamp (1)</a></td>
-            <td class="text-secondary">Tetris</td>
-          </tr>
-          <!-- Tu pourras ensuite remplacer par une boucle PHP -->
+          <?php foreach ($parties as $partie): ?>
+            <tr>
+              <td><?= $partie->getDateCreation()->format('Y-m-d à H:i') ?></td>
+              <td>
+                <a href="profil.phtml?id=<?= $partie->getJoueur1()->getId() ?>" class="text-dark fw-semibold">
+                  <?= htmlspecialchars($partie->getJoueur1()->getNomComplet()) ?> (<?= $partie->getScoreJoueur1() ?>)
+                </a>
+              </td>
+              <td>
+                <a href="profil.phtml?id=<?= $partie->getJoueur2()->getId() ?>" class="text-dark fw-semibold">
+                  <?= htmlspecialchars($partie->getJoueur2()->getNomComplet()) ?> (<?= $partie->getScoreJoueur2() ?>)
+                </a>
+              </td>
+              <td class="text-secondary"><?= htmlspecialchars($partie->getJeu()->getNom()) ?></td>
+            </tr>
+          <?php endforeach; ?>
         </tbody>
       </table>
     </div>
