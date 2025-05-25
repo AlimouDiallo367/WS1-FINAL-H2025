@@ -1,9 +1,6 @@
 <?php
 require_once "config.php";
 require_once "session.php";
-
-// $infos[] = "Un message d'information";
-// $erreurs[] = "Un message d'erreur";
 ?>
 
 <!DOCTYPE html>
@@ -14,65 +11,50 @@ require_once "session.php";
   <title>Inscription - Point Final</title>
 </head>
 
-<body>
+<body class="bg-gray-100">
   <?php require_once 'section/entete.phtml'; ?>
 
-  <main class="container py-5" style="max-width: 600px;">
+  <main class="container" style="max-width: 600px; margin-top: 80px;">
     <?php require_once 'section/retroaction.phtml'; ?>
 
     <div class="card shadow-sm">
       <div class="card-body">
-        <h2 class="card-title text-center mb-4">Inscription</h2>
+        <h2 class="text-center mb-4 text-primary">Inscription</h2>
 
         <form method="post" action="inscription.phtml">
-          <!-- Nom utilisateur -->
           <div class="mb-3">
-            <label for="nom-utilisateur" class="form-label">Nom d'utilisateur</label>
-            <input type="text" class="form-control" id="nom-utilisateur" name="nom-utilisateur" required maxlength="50">
-          </div>
-
-          <!-- Mot de passe -->
-          <div class="mb-3">
-            <label for="mot-de-passe" class="form-label">Mot de passe</label>
-            <input type="password" class="form-control" id="mot-de-passe" name="mot-de-passe" required>
+            <input type="text" class="form-control" name="nom-utilisateur" placeholder="Nom d'utilisateur" required maxlength="50">
           </div>
 
           <div class="mb-3">
-            <label for="confirmation-mot-de-passe" class="form-label">Confirmation mot de passe</label>
-            <input type="password" class="form-control" id="confirmation-mot-de-passe" name="confirmation-mot-de-passe" required>
+            <input type="password" class="form-control" name="mot-de-passe" placeholder="Mot de passe" required>
+          </div>
+
+          <div class="mb-3">
+            <input type="password" class="form-control" name="confirmation-mot-de-passe" placeholder="Confirmation du mot de passe" required>
           </div>
 
           <hr>
 
-          <!-- Nom complet -->
           <div class="mb-3">
-            <label for="prenom" class="form-label">Prénom</label>
-            <input type="text" class="form-control" id="prenom" name="prenom" required maxlength="50">
+            <input type="text" class="form-control" name="prenom" placeholder="Prénom" required maxlength="50">
           </div>
 
           <div class="mb-3">
-            <label for="nom" class="form-label">Nom de famille</label>
-            <input type="text" class="form-control" id="nom" name="nom" required maxlength="50">
+            <input type="text" class="form-control" name="nom" placeholder="Nom de famille" required maxlength="50">
           </div>
 
-          <!-- Bio -->
           <div class="mb-3">
-            <label for="bio" class="form-label">Bio</label>
-            <input type="text" class="form-control" id="bio" name="bio" required maxlength="255">
+            <input type="text" class="form-control" name="bio" placeholder="Votre courte bio..." required maxlength="255">
           </div>
 
-          <!-- Image de profil -->
-          <div class="mb-3">
-            <label for="url-image" class="form-label">URL de votre image de profil</label>
-            <div class="d-flex align-items-center gap-2">
-              <img id="img-profil" src="assets/img/profil-defaut.jpg" alt="Image profil" class="rounded-circle" width="60" height="60">
-              <input type="url" class="form-control" id="url-image" name="url-image" required placeholder="http://...">
-            </div>
+          <div class="mb-4 d-flex align-items-center gap-3">
+            <img id="img-profil" src="assets/img/profil-defaut.jpg" alt="Image profil" class="rounded-circle" width="60" height="60">
+            <input type="url" class="form-control" name="url-image" id="url-image" placeholder="URL de votre image de profil (http://...)" required>
           </div>
 
-          <!-- Bouton -->
-          <div class="d-grid mt-4">
-            <input type="submit" class="btn btn-primary" name="bouton-inscription" value="S'inscrire">
+          <div class="d-grid">
+            <button type="submit" class="btn btn-primary" name="bouton-inscription">S'inscrire</button>
           </div>
         </form>
 
@@ -89,12 +71,7 @@ require_once "session.php";
     document.getElementById('url-image').addEventListener('input', function () {
       const url = this.value.trim();
       const img = document.getElementById('img-profil');
-
-      if (url.match(/^https?:\/\/.*\.(jpg|jpeg|png)$/i)) {
-        img.src = url;
-      } else {
-        img.src = 'assets/img/profil-defaut.jpg';
-      }
+      img.src = /^https?:\/\/.*\.(jpg|jpeg|png)$/i.test(url) ? url : 'assets/img/profil-defaut.jpg';
     });
   </script>
 </body>

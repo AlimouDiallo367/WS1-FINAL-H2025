@@ -1,0 +1,87 @@
+<?php
+require_once "config.php";
+require_once 'session.php';
+// TODO: récupérer l'utilisateur à partir de $_GET['id'] avec validation
+?>
+
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+  <?php require_once 'section/head.phtml'; ?>
+  <title>Profil - Point Final</title>
+</head>
+
+<body>
+  <?php require_once 'section/entete.phtml'; ?>
+
+  <main class="container py-4">
+    <?php require_once 'section/retroaction.phtml'; ?>
+
+    <!-- Titre principal -->
+    <div class="mb-4 text-center">
+      <h2 class="text-primary fw-bold mb-2">Profil du joueur</h2>
+      <p class="text-muted text-sm">Informations détaillées et statistiques de jeu</p>
+    </div>
+
+    <div class="row g-4">
+      <!-- Infos du profil -->
+      <div class="col-12 col-lg-6">
+        <div class="card shadow-sm">
+          <div class="card-body text-center">
+            <img src="https://hips.hearstapps.com/hmg-prod/images/gettyimages-150327735-copy.jpg" alt="Profil" class="rounded-circle mb-3" width="120">
+            <h5 class="mb-1">Chuck Norris <small class="text-muted">(root)</small></h5>
+            <p class="text-muted small fst-italic">"Je ne peux pas jouer, car le site ne supporte pas une infinie de victoires..."</p>
+
+            <hr class="my-3">
+            <p class="mb-1"><strong>Membre depuis :</strong> 2025-01-01</p>
+            <p class="mb-0"><strong>Type de compte :</strong> <span class="badge bg-primary">Administrateur</span></p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Statistiques -->
+      <div class="col-12 col-lg-6">
+        <div class="card shadow-sm h-100">
+          <div class="card-body">
+            <h5 class="card-title mb-4 text-center">Statistiques</h5>
+            <div class="row text-center">
+              <div class="col-6 mb-3">
+                <h6 class="text-muted">Victoires</h6>
+                <p class="fw-bold">0</p>
+              </div>
+              <div class="col-6 mb-3">
+                <h6 class="text-muted">Égalités</h6>
+                <p class="fw-bold">0</p>
+              </div>
+              <div class="col-6 mb-3">
+                <h6 class="text-muted">Défaites</h6>
+                <p class="fw-bold">0</p>
+              </div>
+              <div class="col-6 mb-3">
+                <h6 class="text-muted">Total</h6>
+                <p class="fw-bold">0</p>
+              </div>
+              <div class="col-12">
+                <h6 class="text-muted">Score total</h6>
+                <p class="fw-bold">0</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Parties jouées -->
+    <div class="mt-5">
+      <h4 class="mb-3">Parties jouées</h4>
+      <div class="alert alert-warning">
+        Il n'y a aucune partie jouée par ce joueur.
+      </div>
+    </div>
+  </main>
+
+  <?php require_once 'section/pied.phtml'; ?>
+</body>
+
+</html>

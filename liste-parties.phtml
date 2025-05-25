@@ -1,9 +1,6 @@
 <?php
 require_once "config.php";
 require_once "session.php";
-
-// $infos[] = "Un message d'information";
-// $erreurs[] = "Un message d'erreur";
 ?>
 
 <!DOCTYPE html>
@@ -14,14 +11,21 @@ require_once "session.php";
   <title>Liste des parties - Point Final</title>
 </head>
 
-<body>
+<body class="g-sidenav-show bg-gray-100">
   <?php require_once 'section/entete.phtml'; ?>
 
-  <main class="container py-4">
+  <main class="main-content position-relative max-height-vh-100 h-100 border-radius-lg px-4 py-4">
     <?php require_once 'section/retroaction.phtml'; ?>
 
-    <h1 class="mb-4">Liste des parties</h1>
+    <!-- Titre principal -->
+    <div class="mb-4 text-center">
+      <h2 class="text-gradient text-primary fw-bold mb-2">Liste des parties</h2>
+      <p class="text-secondary text-sm mx-auto" style="max-width: 600px;">
+        Voici l’ensemble des parties jouées sur l’arcade, avec les joueurs et leur score.
+      </p>
+    </div>
 
+    <!-- Tableau des parties -->
     <div class="table-responsive shadow-sm border rounded">
       <table class="table table-hover mb-0">
         <thead class="table-light">
@@ -33,20 +37,20 @@ require_once "session.php";
           </tr>
         </thead>
         <tbody>
-          <!-- Exemple statique à remplacer par une boucle PHP plus tard -->
+          <!-- Exemple statique -->
           <tr>
             <td>2025-02-09 à 12:12</td>
-            <td><a href="profil.phtml?id=7">Mathieu St-Yves (2)</a></td>
-            <td><a href="profil.phtml?id=5">Lyne Amyot (1)</a></td>
-            <td>Tetris</td>
+            <td><a href="profil.phtml?id=7" class="text-dark fw-semibold">Mathieu St-Yves (2)</a></td>
+            <td><a href="profil.phtml?id=5" class="text-dark fw-semibold">Lyne Amyot (1)</a></td>
+            <td class="text-secondary">Tetris</td>
           </tr>
           <tr>
             <td>2025-02-08 à 17:08</td>
-            <td><a href="profil.phtml?id=7">Mathieu St-Yves (1)</a></td>
-            <td><a href="profil.phtml?id=2">fred Monchamp (1)</a></td>
-            <td>Tetris</td>
+            <td><a href="profil.phtml?id=7" class="text-dark fw-semibold">Mathieu St-Yves (1)</a></td>
+            <td><a href="profil.phtml?id=2" class="text-dark fw-semibold">fred Monchamp (1)</a></td>
+            <td class="text-secondary">Tetris</td>
           </tr>
-          <!-- Tu peux dupliquer ce bloc en attendant le DAO -->
+          <!-- Tu pourras ensuite remplacer par une boucle PHP -->
         </tbody>
       </table>
     </div>

@@ -14,52 +14,55 @@ require_once 'session.php';
   <title>Accueil - Point Final</title>
 </head>
 
-<body>
+<body class="g-sidenav-show bg-gray-100">
   <?php require_once 'section/entete.phtml'; ?>
 
-  <main class="container py-4">
+  <main class="main-content position-relative max-height-vh-100 h-100 border-radius-lg px-4 py-4">
     <?php require_once 'section/retroaction.phtml'; ?>
 
     <!-- Titre principal -->
-    <h1 class="mb-4">Bienvenue sur Point Final !</h1>
-    <p>Point final est simplement un site qui répertorie les résultats des parties jouées sur l'arcade du département afin de pouvoir "remettre dans la face" de ses adversaires leurs défaites!</p>
-
+    <div class="mb-4 text-center">
+      <h2 class="text-gradient text-primary fw-bold mb-2">Bienvenue sur Point Final !</h2>
+      <p class="text-secondary text-sm mx-auto" style="max-width: 600px;">
+        Point final est simplement un site qui répertorie les résultats des parties jouées sur l'arcade du département afin de pouvoir "remettre dans la face" de ses adversaires leurs défaites!
+      </p>
+    </div>
     <!-- Section En bref -->
-    <section class="mb-5">
-      <h2 class="h4 mb-3">En bref</h2>
-      <div class="row g-4">
-        <div class="col-12 col-sm-6 col-lg-3">
-          <div class="card text-center shadow-sm">
-            <div class="card-body">
-              <h6 class="card-subtitle mb-2 text-muted">Nombre de joueurs</h6>
-              <h3 class="card-title">--</h3>
+    <section class="mb-5 section-card">
+      <h2 class="h5 text-dark mb-3">En bref</h2>
+      <div class="row">
+        <div class="col-12 col-sm-6 col-lg-3 mb-4">
+          <div class="card shadow-sm border-radius-xl">
+            <div class="card-body text-center">
+              <h6 class="text-secondary text-sm mb-1">Nombre de joueurs</h6>
+              <h4 class="font-weight-bold mb-0">--</h4>
             </div>
           </div>
         </div>
 
-        <div class="col-12 col-sm-6 col-lg-3">
-          <div class="card text-center shadow-sm">
-            <div class="card-body">
-              <h6 class="card-subtitle mb-2 text-muted">Nombre de jeux</h6>
-              <h3 class="card-title">--</h3>
+        <div class="col-12 col-sm-6 col-lg-3 mb-4">
+          <div class="card shadow-sm border-radius-xl">
+            <div class="card-body text-center">
+              <h6 class="text-secondary text-sm mb-1">Nombre de jeux</h6>
+              <h4 class="font-weight-bold mb-0">--</h4>
             </div>
           </div>
         </div>
 
-        <div class="col-12 col-sm-6 col-lg-3">
-          <div class="card text-center shadow-sm">
-            <div class="card-body">
-              <h6 class="card-subtitle mb-2 text-muted">Nombre de parties jouées</h6>
-              <h3 class="card-title">--</h3>
+        <div class="col-12 col-sm-6 col-lg-3 mb-4">
+          <div class="card shadow-sm border-radius-xl">
+            <div class="card-body text-center">
+              <h6 class="text-secondary text-sm mb-1">Nombre de parties jouées</h6>
+              <h4 class="font-weight-bold mb-0">--</h4>
             </div>
           </div>
         </div>
 
-        <div class="col-12 col-sm-6 col-lg-3">
-          <div class="card text-center shadow-sm">
-            <div class="card-body">
-              <h6 class="card-subtitle mb-2 text-muted">Meilleur joueur actuel</h6>
-              <h3 class="card-title"><a href="#">--</a></h3>
+        <div class="col-12 col-sm-6 col-lg-3 mb-4">
+          <div class="card shadow-sm border-radius-xl">
+            <div class="card-body text-center">
+              <h6 class="text-secondary text-sm mb-1">Meilleur joueur actuel</h6>
+              <h4 class="font-weight-bold mb-0"><a href="#" class="text-dark">--</a></h4>
             </div>
           </div>
         </div>
@@ -68,30 +71,28 @@ require_once 'session.php';
 
     <!-- Section Dernières parties -->
     <section>
-      <h2 class="h4 mb-3">Dernières parties jouées</h2>
-      <div class="row g-4">
-
-        <!-- Exemple d'une carte de partie -->
-        <div class="col-12 col-lg-6">
-          <div class="card shadow-sm p-3">
+      <h2 class="h5 text-dark mb-3">Dernières parties jouées</h2>
+      <div class="row">
+        <div class="col-12 col-lg-6 mb-4">
+          <div class="card p-3 shadow-sm border-radius-xl">
             <div class="row align-items-center">
               <div class="col-4 text-center">
-                <img src="assets/img/default-avatar.png" class="img-fluid rounded-circle mb-2" width="64" height="64" alt="Joueur 1">
-                <div>Joueur 1</div>
+                <img src="assets/img/default-avatar.png" class="avatar avatar-lg rounded-circle mb-2" alt="Joueur 1">
+                <div class="text-sm">Joueur 1</div>
                 <div><strong>2</strong></div>
               </div>
               <div class="col-4 text-center">
-                <h5>VS</h5>
+                <h5 class="text-dark mb-1">VS</h5>
                 <img src="assets/img/default-game.png" class="img-fluid my-2" width="64" height="64" alt="Jeu">
-                <div>Nom du jeu</div>
+                <div class="text-sm">Nom du jeu</div>
               </div>
               <div class="col-4 text-center">
-                <img src="assets/img/default-avatar.png" class="img-fluid rounded-circle mb-2" width="64" height="64" alt="Joueur 2">
-                <div>Joueur 2</div>
+                <img src="assets/img/default-avatar.png" class="avatar avatar-lg rounded-circle mb-2" alt="Joueur 2">
+                <div class="text-sm">Joueur 2</div>
                 <div><strong>1</strong></div>
               </div>
             </div>
-            <div class="text-center mt-2 text-muted small">
+            <div class="text-center mt-3 text-muted text-xs">
               Ajoutée le JJ-MM-AAAA à HH:MM
             </div>
           </div>
