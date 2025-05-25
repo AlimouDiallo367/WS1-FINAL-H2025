@@ -138,3 +138,50 @@ public function setNomUtilisateur(string $nomUtilisateur): self
         - changerMotDePasse (Update mot de passe)
         - selectTout (Afficher tout les utilisateur*)
         - supprimer (pas besoin dans le cas du projet)
+3. Complétion de PartieDao.php
+> Dans le contexte de la méthode selectAll() du DAO PartieDao, on pourrait techniquement construire une grosse requête SQL avec plusieurs jointures (JOIN) entre les tables partie, utilisateur (pour j1 et j2), et jeu. Cela permettrait de récupérer toutes les données liées en une seule requête. Cependant, cette approche va à l’encontre du principe de responsabilité unique propre aux DAO. Chaque DAO est censé gérer uniquement l’accès aux données de son entité. En appelant plutôt les méthodes select() de UtilisateurDao et JeuDao, on garde un code plus modulaire, plus facile à lire et surtout plus maintenable. Cela permet également de centraliser toute la logique de construction des objets (Utilisateur, Jeu) dans leur propre DAO, au lieu de dupliquer cette logique à chaque endroit où ils sont utilisés. Ce découplage respecte aussi les bonnes pratiques apprises en programmation orientée objet (POO).
+
+> selectAll : 
+```php
+public function selectAll(int $limite = 0): array
+{
+    $connexion = $this->getConnexion();
+
+    // Base de la requête
+    $sql = "SELECT * FROM partie ORDER BY date_creation DESC";
+    if ($limite > 0) {
+        $sql .= " LIMIT :limite";
+    }
+
+    $requete = $connexion->prepare($sql);
+
+    if ($limite > 0) {
+        $requete->bindValue(":limite", $limite, PDO::PARAM_INT);
+    }
+
+    $requete->execute();
+
+    $parties = [];
+
+    while ($enregistrement = $requete->fetch(PDO::FETCH_ASSOC)) {
+        $partie = new Partie(
+            new DateTime($enregistrement['date_creation']),
+            $enregistrement['j1_id'],
+            $enregistrement['j2_id'],
+            $enregistrement['j1_score'],
+            $enregistrement['j2_score'],
+            $enregistrement['jeu_id'],
+            $enregistrement['id']
+        );
+
+        // Associer les objets liés (optionnel mais utile pour les vues)
+        $partie->setJoueur1($this->utilisateurDao->select($partie->getJoueur1Id()));
+        $partie->setJoueur2($this->utilisateurDao->select($partie->getJoueur2Id()));
+        $partie->setJeu($this->jeuDao->select($partie->getJeuId()));
+
+        $parties[] = $partie;
+    }
+
+    return $parties;
+}
+```
