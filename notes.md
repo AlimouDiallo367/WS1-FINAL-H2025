@@ -185,3 +185,5 @@ public function selectAll(int $limite = 0): array
     return $parties;
 }
 ```
+
+## Autres
