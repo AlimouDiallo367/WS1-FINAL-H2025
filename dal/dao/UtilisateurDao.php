@@ -88,6 +88,8 @@ class UtilisateurDao extends BaseDao
             $requete->bindValue(":url_avatar", $utilisateur->getUrlAvatar());
             $requete->bindValue(":id", $utilisateur->getId());
 
+            $requete->execute();
+
             $connexion->commit();
         }
         catch(PDOException $e)
@@ -98,31 +100,30 @@ class UtilisateurDao extends BaseDao
     }
 
     // 2ème fonctionnalité à implémenter pour le bonus
-    /**
-     * public function changerMotDePasse(int $id, string $nouveauHash): void
-     * {
-     * $connexion = $this->getConnexion();
-     * 
-     *  try {
-     *       $connexion->beginTransaction();
-     *
-     *       $requete = $connexion->prepare(
-     *          "UPDATE utilisateur 
-     *          SET hash = :hash 
-     *          WHERE id = :id"
-     *      );
-     *
-     *       $requete->bindValue(":hash", $nouveauHash);
-     *       $requete->bindValue(":id", $id);
-     *      $requete->execute();
-     *
-     *      $connexion->commit();
-     *   } catch (PDOException $e) {
-     *      $connexion->rollBack();
-     *      throw $e;
-     *  }
-     * }
-     */
+    public function changerMotDePasse(int $id, string $nouveauHash): void
+    {
+        $connexion = $this->getConnexion();
+
+        try {
+            $connexion->beginTransaction();
+
+            $requete = $connexion->prepare("
+                UPDATE utilisateur 
+                SET hash = :hash 
+                WHERE id = :id
+            ");
+
+            $requete->bindValue(":hash", $nouveauHash);
+            $requete->bindValue(":id", $id);
+            $requete->execute();
+
+            $connexion->commit();
+        } catch (PDOException $e) {
+            $connexion->rollBack();
+            throw $e;
+        }
+    }
+
 
     public function selectParNomUtilisateur(string $nomUtilisateur): ?Utilisateur
     {

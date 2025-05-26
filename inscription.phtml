@@ -1,79 +1,163 @@
 <?php
 require_once "config.php";
 require_once "session.php";
+
+$utilisateurDao = new UtilisateurDao($config);
+
+$erreurs = [];
+$infos = [];
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['bouton-inscription'])) {
+    $nomUtilisateur = trim($_POST['nom-utilisateur']);
+    $motDePasse = $_POST['mot-de-passe'];
+    $confirmation = $_POST['confirmation-mot-de-passe'];
+    $prenom = trim($_POST['prenom']);
+    $nom = trim($_POST['nom']);
+    $bio = trim($_POST['bio']);
+    $urlImage = trim($_POST['url-image']);
+
+    if (!ctype_alnum($nomUtilisateur) || strlen($nomUtilisateur) > 50) {
+        $erreurs[] = "Le nom d'utilisateur doit contenir uniquement des lettres/chiffres (max 50).";
+    } elseif ($utilisateurDao->selectParNomUtilisateur($nomUtilisateur)) {
+        $erreurs[] = "Ce nom d'utilisateur est déjà utilisé.";
+    }
+
+    if (empty($prenom) || strlen($prenom) > 50) {
+        $erreurs[] = "Le prénom est requis (max 50 caractères).";
+    }
+
+    if (empty($nom) || strlen($nom) > 50) {
+        $erreurs[] = "Le nom est requis (max 50 caractères).";
+    }
+
+    if (empty($bio) || strlen($bio) > 255) {
+        $erreurs[] = "La bio est requise (max 255 caractères).";
+    }
+
+    if (!filter_var($urlImage, FILTER_VALIDATE_URL)) {
+        $erreurs[] = "L'URL de l'image n'est pas valide.";
+    }
+
+    if (strlen($motDePasse) < 5) {
+        $erreurs[] = "Le mot de passe doit contenir au moins 5 caractères.";
+    } elseif ($motDePasse !== $confirmation) {
+        $erreurs[] = "Les mots de passe ne correspondent pas.";
+    }
+
+    if (empty($erreurs)) {
+        try {
+            $hash = password_hash($motDePasse, PASSWORD_DEFAULT);
+            $utilisateur = new Utilisateur(
+                $nomUtilisateur,
+                $prenom,
+                $nom,
+                $bio,
+                new DateTime(),
+                2,
+                $urlImage,
+                $hash
+            );
+            $utilisateurDao->insert($utilisateur);
+            $_SESSION['infos'][] = "Inscription réussie! Vous pouvez maintenant vous connecter.";
+
+            // Redirection pour vider le POST et réinitialiser les champs
+            header("Location: inscription.phtml?succes=1");
+            exit;
+        } catch (Exception $e) {
+            $erreurs[] = "Une erreur est survenue : " . $e->getMessage();
+        }
+    }
+}
+
+// Nettoie les champs si succès
+if (isset($_GET['succes'])) {
+  $nomUtilisateur = $prenom = $nom = $bio = $urlImage = "";
+}
 ?>
 
 <!DOCTYPE html>
 <html lang="fr">
 
 <head>
-  <?php require_once 'section/head.phtml'; ?>
-  <title>Inscription - Point Final</title>
+    <?php require_once 'section/head.phtml'; ?>
+    <title>Inscription - Point Final</title>
 </head>
 
 <body class="bg-gray-100">
-  <?php require_once 'section/entete.phtml'; ?>
+    <?php require_once 'section/entete.phtml'; ?>
 
-  <main class="container" style="max-width: 600px; margin-top: 80px;">
-    <?php require_once 'section/retroaction.phtml'; ?>
+    <main class="container" style="max-width: 600px; margin-top: 80px;">
+        <?php require_once 'section/retroaction.phtml'; ?>
 
-    <div class="card shadow-sm">
-      <div class="card-body">
-        <h2 class="text-center mb-4 text-primary">Inscription</h2>
+        <div class="card shadow-sm">
+            <div class="card-body">
+                <h2 class="text-center mb-4 text-primary">Inscription</h2>
 
-        <form method="post" action="inscription.phtml">
-          <div class="mb-3">
-            <input type="text" class="form-control" name="nom-utilisateur" placeholder="Nom d'utilisateur" required maxlength="50">
-          </div>
+                <form method="post" action="inscription.phtml">
+                    <div class="mb-3">
+                        <input type="text" class="form-control" name="nom-utilisateur" placeholder="Nom d'utilisateur"
+                            maxlength="50" required value="<?= htmlspecialchars($nomUtilisateur) ?>">
+                    </div>
 
-          <div class="mb-3">
-            <input type="password" class="form-control" name="mot-de-passe" placeholder="Mot de passe" required>
-          </div>
+                    <div class="mb-3">
+                        <input type="password" class="form-control" name="mot-de-passe"
+                            placeholder="Mot de passe (≥ 5 caractères)" required>
+                    </div>
 
-          <div class="mb-3">
-            <input type="password" class="form-control" name="confirmation-mot-de-passe" placeholder="Confirmation du mot de passe" required>
-          </div>
+                    <div class="mb-3">
+                        <input type="password" class="form-control" name="confirmation-mot-de-passe"
+                            placeholder="Confirmation du mot de passe" required>
+                    </div>
 
-          <hr>
+                    <hr>
 
-          <div class="mb-3">
-            <input type="text" class="form-control" name="prenom" placeholder="Prénom" required maxlength="50">
-          </div>
+                    <div class="mb-3">
+                        <input type="text" class="form-control" name="prenom" placeholder="Prénom" maxlength="50"
+                            required value="<?= htmlspecialchars($prenom) ?>">
+                    </div>
 
-          <div class="mb-3">
-            <input type="text" class="form-control" name="nom" placeholder="Nom de famille" required maxlength="50">
-          </div>
+                    <div class="mb-3">
+                        <input type="text" class="form-control" name="nom" placeholder="Nom de famille" maxlength="50"
+                            required value="<?= htmlspecialchars($nom) ?>">
+                    </div>
 
-          <div class="mb-3">
-            <input type="text" class="form-control" name="bio" placeholder="Votre courte bio..." required maxlength="255">
-          </div>
+                    <div class="mb-3">
+                        <input type="text" class="form-control" name="bio" placeholder="Votre courte bio..."
+                            maxlength="255" required value="<?= htmlspecialchars($bio) ?>">
+                    </div>
 
-          <div class="mb-4 d-flex align-items-center gap-3">
-            <img id="img-profil" src="assets/img/profil-defaut.jpg" alt="Image profil" class="rounded-circle" width="60" height="60">
-            <input type="url" class="form-control" name="url-image" id="url-image" placeholder="URL de votre image de profil (http://...)" required>
-          </div>
+                    <div class="mb-4 d-flex align-items-center gap-3">
+                        <img id="img-profil" src="<?= htmlspecialchars($urlImage ?: 'assets/img/profil-defaut.jpg') ?>"
+                            alt="Image profil" class="rounded-circle" width="60" height="60">
+                        <input type="url" class="form-control" name="url-image" id="url-image"
+                            placeholder="URL de votre image de profil (http://...)" required
+                            value="<?= htmlspecialchars($urlImage) ?>">
+                    </div>
 
-          <div class="d-grid">
-            <button type="submit" class="btn btn-primary" name="bouton-inscription">S'inscrire</button>
-          </div>
-        </form>
+                    <div class="d-grid">
+                        <button type="submit" class="btn btn-primary" name="bouton-inscription">S'inscrire</button>
+                    </div>
+                </form>
 
-        <div class="text-center mt-4">
-          <small>Déjà un compte ? <a href="connexion.phtml">Connectez-vous ici</a>.</small>
+                <div class="text-center mt-4">
+                    <small>Déjà un compte ? <a href="connexion.phtml">Connectez-vous ici</a>.</small>
+                </div>
+            </div>
         </div>
-      </div>
-    </div>
-  </main>
+    </main>
 
-  <?php require_once 'section/pied.phtml'; ?>
+    <?php require_once 'section/pied.phtml'; ?>
 
-  <script>
-    document.getElementById('url-image').addEventListener('input', function () {
-      const url = this.value.trim();
-      const img = document.getElementById('img-profil');
-      img.src = /^https?:\/\/.*\.(jpg|jpeg|png)$/i.test(url) ? url : 'assets/img/profil-defaut.jpg';
-    });
-  </script>
+    <script>
+        document.getElementById('url-image').addEventListener('input', function () {
+            const url = this.value.trim();
+            const img = document.getElementById('img-profil');
+            img.src = /^https?:\/\/.*\.(jpg|jpeg|png|webp)$/i.test(url)
+                ? url
+                : 'assets/img/profil-defaut.jpg';
+        });
+    </script>
 </body>
 
 </html>
+

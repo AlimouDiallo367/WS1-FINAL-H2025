@@ -44,6 +44,13 @@
               <span class="material-icons-round me-1">account_circle</span> <?= htmlspecialchars($utilisateurConnecte->getNomComplet()) ?>
             </a>
           </li>
+
+          <li class="nav-item">
+            <a class="nav-link d-flex align-items-center" href="gerer-compte.phtml">
+              <span class="material-icons-round me-1">settings</span> Gérer le compte
+            </a>
+          </li>
+
           <li class="nav-item">
             <a class="nav-link d-flex align-items-center text-danger" href="connexion.phtml?bouton-deconnexion=1">
               <span class="material-icons-round me-1">logout</span> Déconnexion
@@ -63,7 +70,7 @@
           </li>
         <?php endif; ?>
 
-        <!-- Liens temporaires de test -->
+        <!-- Ajouter partie si admin -->
         <?php if ($utilisateurConnecte && $utilisateurConnecte->getRole()->getNom() === 'Administrateur'): ?>
           <li class="nav-item">
             <a class="nav-link d-flex align-items-center text-warning" href="ajout-partie.phtml">

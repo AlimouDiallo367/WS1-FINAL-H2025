@@ -1,0 +1,146 @@
+<?php
+require_once "config.php";
+require_once "session.php";
+
+$utilisateurConnecte = getUtilisateurConnecte();
+
+if (!$utilisateurConnecte) {
+    header("Location: connexion.phtml");
+    exit;
+}
+
+$utilisateurDao = new UtilisateurDao($config);
+$erreurs = [];
+$infos = [];
+
+// Mise à jour des informations de profil
+if (isset($_POST['bouton-sauvegarder-info'])) {
+    $prenom = trim($_POST['prenom']);
+    $nom = trim($_POST['nom']);
+    $bio = trim($_POST['bio']);
+    $url = trim($_POST['url']);
+
+    if (empty($prenom) || strlen($prenom) > 50) {
+        $erreurs[] = "Le prénom est requis et doit contenir au plus 50 caractères.";
+    }
+
+    if (empty($nom) || strlen($nom) > 50) {
+        $erreurs[] = "Le nom est requis et doit contenir au plus 50 caractères.";
+    }
+
+    if (empty($bio) || strlen($bio) > 255) {
+        $erreurs[] = "La bio est requise et doit contenir au plus 255 caractères.";
+    }
+
+    if (!filter_var($url, FILTER_VALIDATE_URL)) {
+        $erreurs[] = "L'URL de l'image est invalide.";
+    }
+
+    if (empty($erreurs)) {
+        $utilisateurConnecte->setPrenom($prenom);
+        $utilisateurConnecte->setNom($nom);
+        $utilisateurConnecte->setBio($bio);
+        $utilisateurConnecte->setUrlAvatar($url);
+        $utilisateurDao->update($utilisateurConnecte);
+        setUtilisateurConnecte($utilisateurConnecte);
+        $infos[] = "Informations mises à jour avec succès.";
+    }
+}
+
+// Modification du mot de passe
+if (isset($_POST['bouton-modifier-mdp'])) {
+    $mdpActuel = $_POST['mdp-actuel'];
+    $nouveau = $_POST['nv-mdp'];
+    $confirmation = $_POST['confirmation-nv-mdp'];
+
+    if (!password_verify($mdpActuel, $utilisateurConnecte->getHash())) {
+        $erreurs[] = "Mot de passe actuel incorrect.";
+    } elseif (strlen($nouveau) < 5) {
+        $erreurs[] = "Le nouveau mot de passe doit contenir au moins 5 caractères.";
+    } elseif ($nouveau !== $confirmation) {
+        $erreurs[] = "Les mots de passe ne correspondent pas.";
+    } else {
+        $nouveauHash = password_hash($nouveau, PASSWORD_DEFAULT);
+        $utilisateurDao->changerMotDePasse($utilisateurConnecte->getId(), $nouveauHash);
+
+        // Met à jour la session avec le nouveau hash
+        $utilisateurConnecte->setHash($nouveauHash);
+        setUtilisateurConnecte($utilisateurConnecte);
+
+        $infos[] = "Mot de passe modifié avec succès.";
+    }
+}
+?>
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <?php require_once 'section/head.phtml'; ?>
+  <title>Gérer mon compte - Point Final</title>
+</head>
+<body class="bg-gray-100">
+  <?php require_once 'section/entete.phtml'; ?>
+
+  <main class="container py-5">
+    <?php require_once 'section/retroaction.phtml'; ?>
+
+    <h2 class="text-center text-primary mb-4">Gestion du compte</h2>
+
+    <div class="row g-4">
+      <!-- Infos personnelles -->
+      <div class="col-12 col-lg-6">
+        <div class="card shadow-sm p-4">
+          <h5 class="text-primary mb-3">Modifier mes informations</h5>
+          <form method="post">
+            <div class="mb-3">
+              <label>Prénom</label>
+              <input type="text" name="prenom" class="form-control" maxlength="50"
+                     value="<?= htmlspecialchars($utilisateurConnecte->getPrenom()) ?>" required>
+            </div>
+            <div class="mb-3">
+              <label>Nom</label>
+              <input type="text" name="nom" class="form-control" maxlength="50"
+                     value="<?= htmlspecialchars($utilisateurConnecte->getNom()) ?>" required>
+            </div>
+            <div class="mb-3">
+              <label>Bio</label>
+              <input type="text" name="bio" class="form-control" maxlength="255"
+                     value="<?= htmlspecialchars($utilisateurConnecte->getBio()) ?>" required>
+            </div>
+            <div class="mb-3">
+              <label>URL de l'image de profil</label>
+              <input type="url" name="url" class="form-control"
+                     value="<?= htmlspecialchars($utilisateurConnecte->getUrlAvatar()) ?>" required>
+            </div>
+            <button type="submit" name="bouton-sauvegarder-info" class="btn btn-primary w-100">Sauvegarder</button>
+          </form>
+        </div>
+      </div>
+
+      <!-- Mot de passe -->
+      <div class="col-12 col-lg-6">
+        <div class="card shadow-sm p-4">
+          <h5 class="text-primary mb-3">Modifier mon mot de passe</h5>
+          <form method="post">
+            <div class="mb-3">
+              <label>Mot de passe actuel</label>
+              <input type="password" name="mdp-actuel" class="form-control" required>
+            </div>
+            <div class="mb-3">
+              <label>Nouveau mot de passe</label>
+              <input type="password" name="nv-mdp" class="form-control" required>
+            </div>
+            <div class="mb-3">
+              <label>Confirmation</label>
+              <input type="password" name="confirmation-nv-mdp" class="form-control" required>
+            </div>
+            <button type="submit" name="bouton-modifier-mdp" class="btn btn-warning w-100">Changer le mot de passe</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <?php require_once 'section/pied.phtml'; ?>
+</body>
+</html>

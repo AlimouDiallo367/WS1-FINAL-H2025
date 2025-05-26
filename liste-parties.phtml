@@ -76,7 +76,7 @@ $parties = $partieDao->selectAll();
               <td>
                 <form method="post" onsubmit="return confirm('Supprimer cette partie ?');">
                   <input type="hidden" name="partie-id" value="<?= $partie->getId() ?>">
-                  <button type="submit" name="supprimer-partie" class="btn btn-sm btn-danger">❌</button>
+                  <button type="submit" name="supprimer-partie" class="btn btn-sm btn-danger">X</button>
                 </form>
               </td>
             <?php endif; ?>
