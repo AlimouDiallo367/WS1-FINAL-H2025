@@ -1,11 +1,14 @@
 <?php
+$infos = $_SESSION['infos'] ?? [];
+$erreurs = $_SESSION['erreurs'] ?? [];
+unset($_SESSION['infos'], $_SESSION['erreurs']);
+
 require_once "config.php";
 require_once "session.php";
 
 $utilisateurDao = new UtilisateurDao($config);
 
 $erreurs = [];
-$infos = [];
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['bouton-inscription'])) {
     $nomUtilisateur = trim($_POST['nom-utilisateur']);
@@ -70,9 +73,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['bouton-inscription'])
 }
 
 // Nettoie les champs si succès
-if (isset($_GET['succes'])) {
-  $nomUtilisateur = $prenom = $nom = $bio = $urlImage = "";
-}
+if (!empty($infos)) {
+    $nomUtilisateur = $prenom = $nom = $bio = $urlImage = "";
+  }
 ?>
 
 <!DOCTYPE html>
@@ -88,6 +91,12 @@ if (isset($_GET['succes'])) {
 
     <main class="container" style="max-width: 600px; margin-top: 80px;">
         <?php require_once 'section/retroaction.phtml'; ?>
+
+        <?php if (isset($_GET['succes'])): ?>
+        <div class="alert alert-success text-center">
+            Inscription réussie! Vous pouvez maintenant vous connecter.
+        </div>
+        <?php endif; ?>
 
         <div class="card shadow-sm">
             <div class="card-body">

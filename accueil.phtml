@@ -109,9 +109,8 @@ $dernieresParties = $partieDao->selectAll(6);
                 <!-- VS + jeu -->
                 <div class="col-4 text-center">
                   <h5 class="text-dark mb-1">VS</h5>
-                  <img src="<?= $partie->getJeu()->getUrlImageJeu() ?: 'assets/img/default-game.png' ?>"
-     class="img-fluid my-2" width="64" height="64" alt="Jeu">
 
+                  <img src="<?= $partie->getJeu()->getUrlImageJeu() ?: 'assets/img/default-game.png' ?>" class="img-fluid my-2" width="64" height="64" alt="Jeu">
                   <div class="text-sm"><?= htmlspecialchars($partie->getJeu()->getNom()) ?></div>
                 </div>
 
