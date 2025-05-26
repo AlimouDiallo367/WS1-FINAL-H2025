@@ -14,7 +14,6 @@ $nbParties = count($partieDao->selectAll());
 $classement = $statistiqueDao->selectClassementGlobal();
 $meilleurJoueur = count($classement) > 0 ? $classement[0] : null;
 
-// Dernières parties
 $dernieresParties = $partieDao->selectAll(6);
 ?>
 

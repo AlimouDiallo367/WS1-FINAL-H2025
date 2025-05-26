@@ -2,14 +2,25 @@
 require_once "config.php";
 require_once "session.php";
 
+$utilisateurConnecte = getUtilisateurConnecte();
+if (!$utilisateurConnecte || $utilisateurConnecte->getRole()->getNom() !== 'Administrateur') {
+    header("Location: accueil.phtml");
+    exit;
+}
+
 $utilisateurDao = new UtilisateurDao($config);
 $jeuDao = new JeuDao($config);
 $partieDao = new PartieDao($config);
 
-$joueurs = $utilisateurDao->selectAllParRole(2); // Rôle joueur
+$joueurs = $utilisateurDao->selectAllParRole(2);
 $jeux = $jeuDao->selectAll();
+
 $erreurs = [];
 $succes = false;
+
+// Valeurs par défaut
+$j1Id = $j2Id = $jeuId = 0;
+$scoreJ1 = $scoreJ2 = 0;
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['bouton-ajouter-partie'])) {
     $j1Id = (int)$_POST['select-j1'];
@@ -18,11 +29,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['bouton-ajouter-partie
     $scoreJ1 = (int)$_POST['score-j1'];
     $scoreJ2 = (int)$_POST['score-j2'];
 
-    if ($j1Id === $j2Id) {
-        $erreurs[] = "Les deux joueurs doivent être différents.";
-    } elseif ($j1Id === 0 || $j2Id === 0 || $jeuId === 0) {
-        $erreurs[] = "Tous les champs doivent être remplis.";
-    } else {
+    if ($j1Id === 0 || $j2Id === 0) {
+      $erreurs[] = "Vous devez sélectionner deux joueurs.";
+    } elseif ($j1Id === $j2Id) {
+        $erreurs[] = "Les deux joueurs doivent être différents!";
+    }
+    
+    if ($jeuId === 0) {
+        $erreurs[] = "Le jeu doit être sélectionné!";
+    }
+    
+    if (!isset($_POST['score-j1']) || $scoreJ1 < 0 || !isset($_POST['score-j2']) || $scoreJ2 < 0) {
+        $erreurs[] = "Les scores doivent être des entiers positifs.";
+    }
+
+    if (empty($erreurs)) {
         try {
             $partie = new Partie(
                 new DateTime(),
@@ -34,6 +55,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['bouton-ajouter-partie
             );
             $partieDao->insert($partie);
             $succes = true;
+
+            // Réinitialiser le formulaire après succès
+            $j1Id = $j2Id = $jeuId = 0;
+            $scoreJ1 = $scoreJ2 = 0;
         } catch (Exception $e) {
             $erreurs[] = "Erreur lors de l'ajout : " . $e->getMessage();
         }
@@ -64,38 +89,47 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['bouton-ajouter-partie
 
     <form method="post" action="ajout-partie.phtml">
       <div class="row g-3">
+        <!-- Joueur 1 -->
         <div class="col-lg-4">
           <label for="select-j1" class="form-label">Joueur 1</label>
           <select class="form-select" name="select-j1" id="select-j1" required>
-            <option value="0" disabled selected>Choisir...</option>
+            <option value="0" disabled <?= $j1Id === 0 ? 'selected' : '' ?>>Choisir...</option>
             <?php foreach ($joueurs as $j): ?>
-              <option value="<?= $j->getId() ?>"><?= htmlspecialchars($j->getPrenom() . ' ' . $j->getNom()) ?></option>
+              <option value="<?= $j->getId() ?>" <?= $j1Id === $j->getId() ? 'selected' : '' ?>>
+                <?= htmlspecialchars($j->getPrenom() . ' ' . $j->getNom()) ?>
+              </option>
             <?php endforeach; ?>
           </select>
           <label class="mt-2">Score :</label>
-          <input type="number" name="score-j1" class="form-control" min="0" value="0">
+          <input type="number" name="score-j1" class="form-control" min="0" value="<?= $scoreJ1 ?>">
         </div>
 
+        <!-- Jeu -->
         <div class="col-lg-4 text-center d-flex flex-column justify-content-center">
           <label for="select-jeu" class="form-label">Jeu</label>
           <select class="form-select" name="select-jeu" id="select-jeu" required>
-            <option value="0" disabled selected>Choisir...</option>
+            <option value="0" disabled <?= $jeuId === 0 ? 'selected' : '' ?>>Choisir...</option>
             <?php foreach ($jeux as $jeu): ?>
-              <option value="<?= $jeu->getId() ?>"><?= htmlspecialchars($jeu->getNom()) ?></option>
+              <option value="<?= $jeu->getId() ?>" <?= $jeuId === $jeu->getId() ? 'selected' : '' ?>>
+                <?= htmlspecialchars($jeu->getNom()) ?>
+              </option>
             <?php endforeach; ?>
           </select>
         </div>
 
+        <!-- Joueur 2 -->
         <div class="col-lg-4">
           <label for="select-j2" class="form-label">Joueur 2</label>
           <select class="form-select" name="select-j2" id="select-j2" required>
-            <option value="0" disabled selected>Choisir...</option>
+            <option value="0" disabled <?= $j2Id === 0 ? 'selected' : '' ?>>Choisir...</option>
             <?php foreach ($joueurs as $j): ?>
-              <option value="<?= $j->getId() ?>"><?= htmlspecialchars($j->getPrenom() . ' ' . $j->getNom()) ?></option>
+              <option value="<?= $j->getId() ?>" <?= $j2Id === $j->getId() ? 'selected' : '' ?>>
+                <?= htmlspecialchars($j->getPrenom() . ' ' . $j->getNom()) ?>
+              </option>
             <?php endforeach; ?>
           </select>
           <label class="mt-2">Score :</label>
-          <input type="number" name="score-j2" class="form-control" min="0" value="0">
+          <input type="number" name="score-j2" class="form-control" min="0" value="<?= $scoreJ2 ?>">
         </div>
       </div>
 
