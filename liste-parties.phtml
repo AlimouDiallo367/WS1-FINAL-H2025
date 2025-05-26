@@ -3,6 +3,20 @@ require_once "config.php";
 require_once "session.php";
 
 $partieDao = new PartieDao($config);
+$utilisateurConnecte = getUtilisateurConnecte();
+
+// Gestion de la suppression d'une partie (si administrateur)
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['supprimer-partie']) && isset($_POST['partie-id'])) {
+    if ($utilisateurConnecte && $utilisateurConnecte->getRole()->getNom() === 'Administrateur') {
+        $id = (int)$_POST['partie-id'];
+        $partieDao->delete($id);
+        $_SESSION['infos'][] = "La partie a été supprimée avec succès.";
+        header("Location: liste-parties.phtml"); // Redirection pour éviter le repost
+        exit;
+    }
+}
+
+
 $parties = $partieDao->selectAll();
 ?>
 
@@ -37,25 +51,37 @@ $parties = $partieDao->selectAll();
             <th>Joueur 1 (score)</th>
             <th>Joueur 2 (score)</th>
             <th>Jeu</th>
+            <?php if ($utilisateurConnecte && $utilisateurConnecte->getRole()->getNom() === 'Administrateur'): ?>
+              <th>Supprimer</th>
+            <?php endif; ?>
           </tr>
         </thead>
         <tbody>
-          <?php foreach ($parties as $partie): ?>
-            <tr>
-              <td><?= $partie->getDateCreation()->format('Y-m-d à H:i') ?></td>
+        <?php foreach ($parties as $partie): ?>
+          <tr>
+            <td><?= $partie->getDateCreation()->format('Y-m-d à H:i') ?></td>
+            <td>
+              <a href="profil.phtml?id=<?= $partie->getJoueur1()->getId() ?>" class="text-dark fw-semibold">
+                <?= htmlspecialchars($partie->getJoueur1()->getNomComplet()) ?> (<?= $partie->getScoreJoueur1() ?>)
+              </a>
+            </td>
+            <td>
+              <a href="profil.phtml?id=<?= $partie->getJoueur2()->getId() ?>" class="text-dark fw-semibold">
+                <?= htmlspecialchars($partie->getJoueur2()->getNomComplet()) ?> (<?= $partie->getScoreJoueur2() ?>)
+              </a>
+            </td>
+            <td class="text-secondary"><?= htmlspecialchars($partie->getJeu()->getNom()) ?></td>
+
+            <?php if ($utilisateurConnecte && $utilisateurConnecte->getRole()->getNom() === 'Administrateur'): ?>
               <td>
-                <a href="profil.phtml?id=<?= $partie->getJoueur1()->getId() ?>" class="text-dark fw-semibold">
-                  <?= htmlspecialchars($partie->getJoueur1()->getNomComplet()) ?> (<?= $partie->getScoreJoueur1() ?>)
-                </a>
+                <form method="post" onsubmit="return confirm('Supprimer cette partie ?');">
+                  <input type="hidden" name="partie-id" value="<?= $partie->getId() ?>">
+                  <button type="submit" name="supprimer-partie" class="btn btn-sm btn-danger">❌</button>
+                </form>
               </td>
-              <td>
-                <a href="profil.phtml?id=<?= $partie->getJoueur2()->getId() ?>" class="text-dark fw-semibold">
-                  <?= htmlspecialchars($partie->getJoueur2()->getNomComplet()) ?> (<?= $partie->getScoreJoueur2() ?>)
-                </a>
-              </td>
-              <td class="text-secondary"><?= htmlspecialchars($partie->getJeu()->getNom()) ?></td>
-            </tr>
-          <?php endforeach; ?>
+            <?php endif; ?>
+          </tr>
+        <?php endforeach; ?>
         </tbody>
       </table>
     </div>

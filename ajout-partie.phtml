@@ -1,0 +1,110 @@
+<?php
+require_once "config.php";
+require_once "session.php";
+
+$utilisateurDao = new UtilisateurDao($config);
+$jeuDao = new JeuDao($config);
+$partieDao = new PartieDao($config);
+
+$joueurs = $utilisateurDao->selectAllParRole(2); // Rôle joueur
+$jeux = $jeuDao->selectAll();
+$erreurs = [];
+$succes = false;
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['bouton-ajouter-partie'])) {
+    $j1Id = (int)$_POST['select-j1'];
+    $j2Id = (int)$_POST['select-j2'];
+    $jeuId = (int)$_POST['select-jeu'];
+    $scoreJ1 = (int)$_POST['score-j1'];
+    $scoreJ2 = (int)$_POST['score-j2'];
+
+    if ($j1Id === $j2Id) {
+        $erreurs[] = "Les deux joueurs doivent être différents.";
+    } elseif ($j1Id === 0 || $j2Id === 0 || $jeuId === 0) {
+        $erreurs[] = "Tous les champs doivent être remplis.";
+    } else {
+        try {
+            $partie = new Partie(
+                new DateTime(),
+                $j1Id,
+                $j2Id,
+                $scoreJ1,
+                $scoreJ2,
+                $jeuId
+            );
+            $partieDao->insert($partie);
+            $succes = true;
+        } catch (Exception $e) {
+            $erreurs[] = "Erreur lors de l'ajout : " . $e->getMessage();
+        }
+    }
+}
+?>
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <?php require_once 'section/head.phtml'; ?>
+  <title>Ajout d'une partie - Point Final</title>
+</head>
+
+<body class="g-sidenav-show bg-gray-100">
+  <?php require_once 'section/entete.phtml'; ?>
+
+  <main class="main-content px-4 py-4">
+    <?php require_once 'section/retroaction.phtml'; ?>
+
+    <h2 class="mb-4 text-gradient text-primary fw-bold text-center">Ajout d'une partie</h2>
+
+    <?php if (!empty($erreurs)): ?>
+      <div class="alert alert-danger"><?= implode('<br>', $erreurs) ?></div>
+    <?php elseif ($succes): ?>
+      <div class="alert alert-success">Partie ajoutée avec succès !</div>
+    <?php endif; ?>
+
+    <form method="post" action="ajout-partie.phtml">
+      <div class="row g-3">
+        <div class="col-lg-4">
+          <label for="select-j1" class="form-label">Joueur 1</label>
+          <select class="form-select" name="select-j1" id="select-j1" required>
+            <option value="0" disabled selected>Choisir...</option>
+            <?php foreach ($joueurs as $j): ?>
+              <option value="<?= $j->getId() ?>"><?= htmlspecialchars($j->getPrenom() . ' ' . $j->getNom()) ?></option>
+            <?php endforeach; ?>
+          </select>
+          <label class="mt-2">Score :</label>
+          <input type="number" name="score-j1" class="form-control" min="0" value="0">
+        </div>
+
+        <div class="col-lg-4 text-center d-flex flex-column justify-content-center">
+          <label for="select-jeu" class="form-label">Jeu</label>
+          <select class="form-select" name="select-jeu" id="select-jeu" required>
+            <option value="0" disabled selected>Choisir...</option>
+            <?php foreach ($jeux as $jeu): ?>
+              <option value="<?= $jeu->getId() ?>"><?= htmlspecialchars($jeu->getNom()) ?></option>
+            <?php endforeach; ?>
+          </select>
+        </div>
+
+        <div class="col-lg-4">
+          <label for="select-j2" class="form-label">Joueur 2</label>
+          <select class="form-select" name="select-j2" id="select-j2" required>
+            <option value="0" disabled selected>Choisir...</option>
+            <?php foreach ($joueurs as $j): ?>
+              <option value="<?= $j->getId() ?>"><?= htmlspecialchars($j->getPrenom() . ' ' . $j->getNom()) ?></option>
+            <?php endforeach; ?>
+          </select>
+          <label class="mt-2">Score :</label>
+          <input type="number" name="score-j2" class="form-control" min="0" value="0">
+        </div>
+      </div>
+
+      <div class="text-center mt-4">
+        <button type="submit" class="btn btn-primary" name="bouton-ajouter-partie">Ajouter la partie</button>
+      </div>
+    </form>
+  </main>
+
+  <?php require_once 'section/pied.phtml'; ?>
+</body>
+</html>

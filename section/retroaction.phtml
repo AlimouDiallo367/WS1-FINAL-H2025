@@ -1,3 +1,9 @@
+<?php
+$infos = $infos ?? ($_SESSION['infos'] ?? []);
+$erreurs = $erreurs ?? ($_SESSION['erreurs'] ?? []);
+unset($_SESSION['infos'], $_SESSION['erreurs']);
+?>
+
 <?php if (!empty($erreurs) && is_array($erreurs)) : ?>
     <div class="zone-erreur">
         <h4>Erreurs</h4>

@@ -114,8 +114,10 @@ if (!$joueur) {
             <div class="row align-items-center">
               <!-- Joueur 1 -->
               <div class="col-4 text-center">
-                <img src="<?= $partie->getJoueur1()->getUrlAvatar() ?: 'assets/img/default-avatar.png' ?>"
-                     class="avatar avatar-lg rounded-circle mb-2" alt="Joueur 1">
+                <a href="profil.phtml?id=<?= $partie->getJoueur1()->getId() ?>">
+                  <img src="<?= $partie->getJoueur1()->getUrlAvatar() ?: 'assets/img/default-avatar.png' ?>" class="avatar avatar-lg rounded-circle mb-2" alt="Joueur 1">
+                </a>
+
                 <div class="text-sm"><?= htmlspecialchars($partie->getJoueur1()->getNomComplet()) ?></div>
                 <div><strong><?= $partie->getScoreJoueur1() ?></strong></div>
               </div>
@@ -130,8 +132,10 @@ if (!$joueur) {
 
               <!-- Joueur 2 -->
               <div class="col-4 text-center">
-                <img src="<?= $partie->getJoueur2()->getUrlAvatar() ?: 'assets/img/default-avatar.png' ?>"
-                     class="avatar avatar-lg rounded-circle mb-2" alt="Joueur 2">
+              <a href="profil.phtml?id=<?= $partie->getJoueur2()->getId() ?>">
+                <img src="<?= $partie->getJoueur2()->getUrlAvatar() ?: 'assets/img/default-avatar.png' ?>" class="avatar avatar-lg rounded-circle mb-2" alt="Joueur 2">
+              </a>
+
                 <div class="text-sm"><?= htmlspecialchars($partie->getJoueur2()->getNomComplet()) ?></div>
                 <div><strong><?= $partie->getScoreJoueur2() ?></strong></div>
               </div>

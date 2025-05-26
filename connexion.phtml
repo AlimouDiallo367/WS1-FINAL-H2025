@@ -1,21 +1,30 @@
 <?php
-
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
+
 require_once "config.php";
 require_once "session.php";
-
-// Redirection si déjà connecté
-if ($utilisateurConnecte) {
-  header("Location: profil.phtml?id=" . $utilisateurConnecte->getId());
-  exit;
-}
 
 $utilisateurDao = new UtilisateurDao($config);
 $erreurs = [];
 $nomUtilisateur = '';
 
+// Déconnexion si le paramètre est passé
+if (isset($_GET['bouton-deconnexion'])) {
+  detruireSession();
+  header("Location: connexion.phtml");
+  exit;
+}
+
+// Si l'utilisateur est déjà connecté, on redirige vers son profil
+$utilisateurConnecte = getUtilisateurConnecte();
+if ($utilisateurConnecte) {
+    header("Location: profil.phtml?id=" . $utilisateurConnecte->getId());
+    exit;
+}
+
+// Si un formulaire de connexion a été soumis
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['bouton-connexion'])) {
     $nomUtilisateur = trim($_POST['nom-utilisateur']);
     $motDePasse = $_POST['mot-de-passe'];
@@ -24,7 +33,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['bouton-connexion'])) 
 
     if ($utilisateur && password_verify($motDePasse, $utilisateur->getHash())) {
         $_SESSION['utilisateur'] = $utilisateur;
-        header("Location: accueil.phtml");
+        $_SESSION['derniereActivite'] = time();
+        header("Location: profil.phtml?id=" . $utilisateur->getId());
         exit;
     } else {
         $erreurs[] = "Nom d'utilisateur ou mot de passe invalide.";
@@ -46,11 +56,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['bouton-connexion'])) 
   <main class="container" style="max-width: 500px; margin-top: 80px;">
     <?php require_once 'section/retroaction.phtml'; ?>
 
+    <?php if (!empty($erreurs)): ?>
+      <div class="alert alert-danger">
+        <?php foreach ($erreurs as $erreur): ?>
+          <div><?= htmlspecialchars($erreur) ?></div>
+        <?php endforeach; ?>
+      </div>
+    <?php endif; ?>
+
     <div class="card shadow-sm">
       <div class="card-body">
         <h2 class="text-center mb-4 text-primary">Connexion</h2>
 
-        <form method="post" action="connexion.phtml" autocomplete="off">
+        <form method="post" autocomplete="off">
           <div class="mb-3">
             <input type="text"
                    class="form-control"

@@ -1,5 +1,7 @@
+<?php require_once 'session.php'; ?>
+<?php $utilisateurConnecte = getUtilisateurConnecte(); ?>
+
 <header class="navbar navbar-expand-lg bg-gradient-dark shadow-sm rounded-3 mt-3 mx-4 px-4 py-2">
-<!-- <header class="navbar navbar-expand-lg navbar-light bg-white shadow-sm px-4 py-2"> -->
   <div class="container-fluid">
 
     <!-- Logo + Nom -->
@@ -8,11 +10,10 @@
       <span class="fw-semibold fs-5 text-white">Point Final</span>
     </a>
 
-
-    <!-- Hamburger mobile (remplacé avec icône Material) -->
-  <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#main-navbar" aria-label="Toggle navigation">
-    <span class="material-icons-round fs-3">menu</span>
-  </button>
+    <!-- Hamburger mobile -->
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#main-navbar" aria-label="Toggle navigation">
+      <span class="material-icons-round fs-3">menu</span>
+    </button>
 
     <!-- Navigation -->
     <div class="collapse navbar-collapse justify-content-end" id="main-navbar">
@@ -36,23 +37,41 @@
           </a>
         </li>
 
-        <li class="nav-item">
-          <a class="nav-link d-flex align-items-center" href="connexion.phtml">
-            <span class="material-icons-round me-1">login</span> Connexion
-          </a>
-        </li>
+        <?php if ($utilisateurConnecte): ?>
+          <!-- Utilisateur connecté -->
+          <li class="nav-item">
+            <a class="nav-link d-flex align-items-center" href="profil.phtml?id=<?= $utilisateurConnecte->getId() ?>">
+              <span class="material-icons-round me-1">account_circle</span> <?= htmlspecialchars($utilisateurConnecte->getNomComplet()) ?>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link d-flex align-items-center text-danger" href="connexion.phtml?bouton-deconnexion=1">
+              <span class="material-icons-round me-1">logout</span> Déconnexion
+            </a>
+          </li>
+        <?php else: ?>
+          <!-- Invité -->
+          <li class="nav-item">
+            <a class="nav-link d-flex align-items-center" href="connexion.phtml">
+              <span class="material-icons-round me-1">login</span> Connexion
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link d-flex align-items-center" href="inscription.phtml">
+              <span class="material-icons-round me-1">person_add</span> Inscription
+            </a>
+          </li>
+        <?php endif; ?>
 
-        <li class="nav-item">
-          <a class="nav-link d-flex align-items-center" href="inscription.phtml">
-            <span class="material-icons-round me-1">person_add</span> Inscription
-          </a>
-        </li>
+        <!-- Liens temporaires de test -->
+        <?php if ($utilisateurConnecte && $utilisateurConnecte->getRole()->getNom() === 'Administrateur'): ?>
+          <li class="nav-item">
+            <a class="nav-link d-flex align-items-center text-warning" href="ajout-partie.phtml">
+              <span class="material-icons-round me-1">add_circle</span> Ajout Partie
+            </a>
+          </li>
+        <?php endif; ?>
 
-        <li class="nav-item">
-          <a class="nav-link d-flex align-items-center text-danger" href="profil.phtml?id=1">
-            <span class="material-icons-round me-1">account_circle</span> Test Profil
-          </a>
-        </li>
       </ul>
     </div>
   </div>
