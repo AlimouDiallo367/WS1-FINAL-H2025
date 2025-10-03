@@ -7,3 +7,7 @@ L'objectif du projet est de développer un site web qui répertorie les résulta
 ## Final Evaluation - Project 
 The goal of the project is to develop a website that lists the game results played on the department's arcade machine
 > **Inspired template** : [**Frédéric Monchamp's website**](http://fm.shawinigan.info:98/)
+
+## Demo 
+https://github.com/user-attachments/assets/17a4f110-628a-44ad-a780-91ad3580a045
+
